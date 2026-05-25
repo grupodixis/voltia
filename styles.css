@@ -180,9 +180,9 @@ textarea {
 .hero-shade {
   z-index: -2;
   background:
-    linear-gradient(180deg, rgba(9, 11, 11, 0.3), rgba(9, 11, 11, 0.42) 45%, rgba(9, 11, 11, 0.82)),
-    radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.55) 72%),
-    linear-gradient(90deg, rgba(9, 11, 11, 0.62), rgba(9, 11, 11, 0.18), rgba(9, 11, 11, 0.62));
+    linear-gradient(180deg, rgba(9, 11, 11, 0.24), rgba(9, 11, 11, 0.34) 45%, rgba(9, 11, 11, 0.76)),
+    radial-gradient(circle at 54% 32%, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.46) 74%),
+    linear-gradient(90deg, rgba(9, 11, 11, 0.6), rgba(9, 11, 11, 0.08) 44%, rgba(9, 11, 11, 0.5));
 }
 
 .corner {
