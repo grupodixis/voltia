@@ -27,6 +27,103 @@ body {
   line-height: 1.45;
 }
 
+.intro-pending,
+.intro-pending body {
+  overflow: hidden;
+}
+
+.site-intro {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: none;
+  place-items: center;
+  overflow: hidden;
+  background: #050707;
+}
+
+.intro-pending .site-intro {
+  display: grid;
+}
+
+.intro-logo-shell {
+  position: relative;
+  width: min(560px, 78vw);
+  aspect-ratio: 660 / 160;
+  opacity: 0;
+  transform: scale(0.92);
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: introLogoEnter 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms forwards;
+}
+
+.intro-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.intro-progress {
+  position: absolute;
+  left: 26%;
+  right: 18%;
+  bottom: -20px;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.intro-progress::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #ff5c22;
+  transform: translateX(-100%);
+  animation: introProgress 2.55s cubic-bezier(0.3, 0.1, 0.2, 1) 350ms forwards;
+}
+
+.site-intro.is-exiting {
+  background: rgba(5, 7, 7, 0);
+  pointer-events: none;
+  transition: background 720ms ease;
+}
+
+.site-intro.is-exiting .intro-logo-shell {
+  animation: none;
+  opacity: 1;
+  transform: translate(var(--intro-x, 0), var(--intro-y, 0)) scale(var(--intro-scale, 0.5));
+  transition: transform 850ms cubic-bezier(0.22, 0.82, 0.24, 1), opacity 250ms ease 650ms;
+}
+
+.site-intro.is-exiting .intro-progress {
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.intro-pending .brand {
+  opacity: 0;
+}
+
+.intro-revealing .brand {
+  opacity: 1;
+  transition: opacity 180ms ease 650ms;
+}
+
+@keyframes introLogoEnter {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes introProgress {
+  to {
+    transform: translateX(0);
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -76,8 +173,10 @@ textarea {
 
 .brand-logo {
   display: block;
-  width: 154px;
+  width: 270px;
   height: auto;
+  aspect-ratio: 660 / 160;
+  pointer-events: none;
 }
 
 .brand-line {
@@ -102,17 +201,41 @@ textarea {
 }
 
 .nav-shell a {
+  position: relative;
   padding: 18px 16px;
   color: rgba(246, 243, 236, 0.72);
   font-size: 0.88rem;
   font-weight: 760;
+  transition: color 180ms ease;
 }
 
 .nav-shell a:hover {
   color: var(--text);
 }
 
-.nav-shell a:first-child::before,
+.nav-shell a::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0;
+  background: var(--accent);
+  vertical-align: 1px;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 180ms ease, transform 180ms ease, margin-right 180ms ease;
+}
+
+.nav-shell a.is-active {
+  color: var(--text);
+}
+
+.nav-shell a.is-active::before {
+  margin-right: 8px;
+  opacity: 1;
+  transform: scale(1);
+}
+
 .solid-link::before {
   content: "";
   display: inline-block;
@@ -143,6 +266,41 @@ textarea {
   background: currentColor;
 }
 
+.theme-toggle {
+  position: fixed;
+  z-index: 22;
+  top: 12px;
+  right: clamp(18px, 3vw, 42px);
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(9, 11, 11, 0.82);
+  color: var(--text);
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+}
+
+.theme-toggle-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.theme-toggle-icon::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px dashed currentColor;
+  border-radius: 50%;
+}
+
 .hero {
   position: relative;
   display: grid;
@@ -171,7 +329,7 @@ textarea {
 
 .hero-image {
   z-index: -3;
-  background: url("assets/hero-automatizaciones.png") center / cover no-repeat;
+  background: url("assets/hero-automatizaciones.webp") center / cover no-repeat;
   filter: saturate(0.82) contrast(1.02);
   transform: scale(1.03);
   opacity: 0;
@@ -326,6 +484,66 @@ h1 span {
   font-size: 1.08rem;
 }
 
+.local-section {
+  padding: 100px clamp(20px, 6vw, 86px);
+  background: #111616;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.local-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.65fr);
+  gap: clamp(30px, 6vw, 82px);
+  align-items: end;
+  margin-bottom: 52px;
+}
+
+.local-intro h2 {
+  max-width: 900px;
+  margin-bottom: 0;
+  font-size: clamp(2.2rem, 4.6vw, 4.9rem);
+  font-weight: 430;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.local-intro p {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.local-coverage {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.local-coverage div {
+  min-height: 190px;
+  padding: 26px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.local-coverage span {
+  display: block;
+  margin-bottom: 48px;
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.local-coverage strong {
+  display: block;
+  font-size: 1.18rem;
+  font-weight: 520;
+  line-height: 1.35;
+}
+
 .dual-audience {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -460,7 +678,7 @@ h1 span {
   padding: clamp(54px, 7vw, 96px) clamp(22px, 5vw, 72px);
   background:
     linear-gradient(rgba(16, 19, 19, 0.68), rgba(16, 19, 19, 0.92)),
-    url("assets/hero-automatizaciones.png") center / cover no-repeat;
+    url("assets/hero-automatizaciones.webp") center / cover no-repeat;
   color: var(--text);
 }
 
@@ -598,7 +816,7 @@ h1 span {
   padding: 104px clamp(20px, 6vw, 86px);
   background:
     linear-gradient(180deg, rgba(13, 16, 16, 0.94), rgba(9, 11, 11, 0.98)),
-    url("assets/sector-lora-iot.png") center / cover fixed;
+    url("assets/sector-lora-iot.webp") center / cover fixed;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -885,7 +1103,7 @@ h1 span {
 .deployment {
   background:
     linear-gradient(180deg, rgba(9, 11, 11, 0.92), rgba(9, 11, 11, 0.98)),
-    url("assets/hero-automatizaciones.png") center / cover fixed;
+    url("assets/hero-automatizaciones.webp") center / cover fixed;
 }
 
 .deployment h2 {
@@ -980,6 +1198,58 @@ h1 span {
   text-transform: uppercase;
 }
 
+.company-contact {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 34px;
+  border-top: 1px solid rgba(17, 20, 20, 0.2);
+  border-left: 1px solid rgba(17, 20, 20, 0.2);
+  font-style: normal;
+}
+
+.contact-action {
+  min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 17px;
+  border-right: 1px solid rgba(17, 20, 20, 0.2);
+  border-bottom: 1px solid rgba(17, 20, 20, 0.2);
+  color: var(--ink);
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.contact-action.address {
+  grid-column: 1 / -1;
+}
+
+.contact-action span {
+  color: rgba(17, 20, 20, 0.58);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.contact-action strong {
+  font-size: 0.96rem;
+  line-height: 1.3;
+}
+
+.contact-action:hover {
+  background: #111717;
+  color: #fffdf6;
+}
+
+.contact-action:hover span {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.contact-action.whatsapp:hover {
+  background: #087f79;
+}
+
 .contact-form {
   display: grid;
   gap: 16px;
@@ -1044,6 +1314,15 @@ h1 span {
 .footer span:first-child {
   color: var(--text);
   font-weight: 950;
+}
+
+.footer a {
+  color: inherit;
+  font-weight: 750;
+}
+
+.footer a:hover {
+  color: var(--accent);
 }
 
 [data-animate] {
@@ -1202,6 +1481,215 @@ h1 span {
   }
 }
 
+[data-theme="light"] {
+  --black: #f3f5f2;
+  --coal: #ffffff;
+  --steel: #e8edeb;
+  --line: rgba(16, 23, 23, 0.17);
+  --muted: rgba(16, 23, 23, 0.64);
+  --text: #111717;
+  --paper: #f7f8f5;
+  --ink: #111717;
+  --accent: #e24d16;
+  --teal: #087f79;
+}
+
+[data-theme="light"] body {
+  background: var(--black);
+}
+
+[data-theme="light"] .brand,
+[data-theme="light"] .nav-shell,
+[data-theme="light"] .theme-toggle {
+  background: rgba(248, 250, 247, 0.92);
+  color: #111717;
+  border-color: rgba(16, 23, 23, 0.18);
+}
+
+[data-theme="light"] .site-header.is-scrolled,
+[data-theme="light"] .topbar.is-scrolled {
+  background: transparent;
+}
+
+[data-theme="light"] .nav-shell a {
+  color: rgba(17, 23, 23, 0.68);
+}
+
+[data-theme="light"] .nav-shell a:hover {
+  color: #111717;
+}
+
+[data-theme="light"] .hero {
+  color: #fffdf6;
+}
+
+[data-theme="light"] .hero-shade {
+  background:
+    linear-gradient(180deg, rgba(9, 11, 11, 0.2), rgba(9, 11, 11, 0.3) 45%, rgba(9, 11, 11, 0.72)),
+    radial-gradient(circle at 54% 32%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.42) 74%),
+    linear-gradient(90deg, rgba(9, 11, 11, 0.52), rgba(9, 11, 11, 0.04) 44%, rgba(9, 11, 11, 0.42));
+}
+
+[data-theme="light"] .statement,
+[data-theme="light"] .products {
+  background: #f3f5f2;
+}
+
+[data-theme="light"] .local-section {
+  background: #e8edeb;
+}
+
+[data-theme="light"] .local-intro p {
+  color: rgba(17, 23, 23, 0.64);
+}
+
+[data-theme="light"] .local-coverage div {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+[data-theme="light"] .dual-audience {
+  background: #ffffff;
+}
+
+[data-theme="light"] .tech-band {
+  background: #e8edeb;
+}
+
+[data-theme="light"] .tech-item:hover {
+  background: rgba(8, 127, 121, 0.06);
+}
+
+[data-theme="light"] .module-visual {
+  color: #fffdf6;
+}
+
+[data-theme="light"] .module-visual strong {
+  color: #fffdf6;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.58);
+}
+
+[data-theme="light"] .module-visual span {
+  color: #ff7a32;
+}
+
+[data-theme="light"] .module-visual div {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .module-visual div:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .sector-gallery {
+  background: #e8edeb;
+}
+
+[data-theme="light"] .sector-gallery .section-label,
+[data-theme="light"] .sector-gallery .gallery-heading h2 {
+  color: #111717;
+}
+
+[data-theme="light"] .sector-card {
+  color: #fffdf6;
+  border-color: rgba(16, 23, 23, 0.22);
+}
+
+[data-theme="light"] .sector-card h3 {
+  color: #fffdf6;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.68);
+}
+
+[data-theme="light"] .sector-card p {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+[data-theme="light"] .iot-section {
+  color: #fffdf6;
+}
+
+[data-theme="light"] .iot-section .section-label,
+[data-theme="light"] .iot-section .iot-intro p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme="light"] .iot-card,
+[data-theme="light"] .sensor-board article {
+  color: #fffdf6;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .iot-card p,
+[data-theme="light"] .sensor-board p {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+[data-theme="light"] .product-row:hover {
+  background: rgba(8, 127, 121, 0.045);
+}
+
+[data-theme="light"] .product-row p,
+[data-theme="light"] .section-heading p {
+  color: rgba(17, 23, 23, 0.64);
+}
+
+[data-theme="light"] .product-media {
+  border-color: rgba(16, 23, 23, 0.18);
+}
+
+[data-theme="light"] .matrix-grid article {
+  background: rgba(255, 255, 255, 0.38);
+}
+
+[data-theme="light"] .deployment {
+  color: #fffdf6;
+}
+
+[data-theme="light"] .deployment h2,
+[data-theme="light"] .deployment .steps h3,
+[data-theme="light"] .deployment .steps span {
+  color: #fffdf6;
+}
+
+[data-theme="light"] .deployment .section-label,
+[data-theme="light"] .deployment .steps p {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+[data-theme="light"] .deployment .steps {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+[data-theme="light"] .deployment .steps article {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+[data-theme="light"] .footer {
+  background: #f3f5f2;
+  color: rgba(17, 23, 23, 0.58);
+}
+
+[data-theme="light"] .footer span:first-child {
+  color: #111717;
+}
+
+[data-theme="light"] .contact-action {
+  color: #111717;
+}
+
+[data-theme="light"] .theme-toggle-icon {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: -5px 1px 0 0 #111717;
+  transform: translate(-34%, -54%);
+}
+
+[data-theme="light"] .theme-toggle-icon::after {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1216,6 +1704,11 @@ h1 span {
     opacity: 1;
     transform: none !important;
     clip-path: none !important;
+  }
+
+  .intro-logo-shell,
+  .intro-progress::after {
+    animation-duration: 1ms !important;
   }
 }
 
@@ -1238,6 +1731,7 @@ h1 span {
 
   .module-section,
   .iot-intro,
+  .local-intro,
   .matrix,
   .contact {
     grid-template-columns: 1fr;
@@ -1274,11 +1768,20 @@ h1 span {
   }
 
   .brand-logo {
-    width: 128px;
+    width: 215px;
   }
 
   .nav-toggle {
     display: block;
+  }
+
+  .theme-toggle {
+    top: 10px;
+    right: 66px;
+  }
+
+  .intro-logo-shell {
+    width: min(430px, 90vw);
   }
 
   .nav-shell {
@@ -1325,6 +1828,7 @@ h1 span {
   }
 
   .statement,
+  .local-section,
   .sector-gallery,
   .iot-section,
   .products,
@@ -1340,6 +1844,7 @@ h1 span {
   .iot-grid,
   .sensor-board,
   .deliverable-grid,
+  .local-coverage,
   .steps,
   .sector-grid,
   .matrix-grid {
@@ -1401,6 +1906,14 @@ h1 span {
 
   .contact-form {
     padding: 20px;
+  }
+
+  .company-contact {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-action.address {
+    grid-column: auto;
   }
 
   .footer {

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 160" role="img" aria-labelledby="title desc">
+  <title id="title">STAVION</title>
+  <desc id="desc">STAVION. Control, estabilidad e innovacion.</desc>
+  <defs>
+    <filter id="signalGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g transform="translate(12 8)">
+    <circle cx="72" cy="72" r="61" fill="#0b0e0e" stroke="#f5f7f5" stroke-opacity=".14" stroke-width="1.5"/>
+    <ellipse cx="72" cy="72" rx="67" ry="28" fill="none" stroke="#f5f7f5" stroke-opacity=".38" stroke-width="1.5" transform="rotate(-18 72 72)"/>
+    <ellipse cx="72" cy="72" rx="31" ry="68" fill="none" stroke="#f5f7f5" stroke-opacity=".2" stroke-width="1.5" transform="rotate(34 72 72)"/>
+    <ellipse cx="72" cy="72" rx="61" ry="40" fill="none" stroke="#f5f7f5" stroke-opacity=".14" stroke-width="1.5" transform="rotate(17 72 72)"/>
+
+    <g id="electron-a" transform="translate(133 50)">
+      <circle r="4.3" fill="#f5f7f5" filter="url(#signalGlow)"/>
+    </g>
+    <g id="electron-b" transform="translate(103 125)">
+      <circle r="3.2" fill="#f5f7f5" fill-opacity=".82"/>
+    </g>
+    <g id="electron-c" transform="translate(20 38)">
+      <circle r="2.7" fill="#f5f7f5" fill-opacity=".42"/>
+    </g>
+
+    <path
+      d="M111 37H61c-17 0-28 9-28 22s11 22 28 22h25c17 0 28 9 28 22s-11 22-28 22H34"
+      fill="none"
+      stroke="#f5f7f5"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+      stroke-width="20"
+    />
+  </g>
+
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <text x="174" y="80" fill="#f5f7f5" font-size="66" font-weight="800" letter-spacing="1.5">STAVION</text>
+    <path d="M178 101h365" stroke="#f5f7f5" stroke-opacity=".18"/>
+    <path d="M178 101h24" stroke="#ff5c22" stroke-width="2.5"/>
+    <text x="178" y="129" fill="#8c9795" font-size="13" font-weight="650" letter-spacing="4.2">CONTROL / ESTABILIDAD / INNOVACION</text>
+  </g>
+</svg>
