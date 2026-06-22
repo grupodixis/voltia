@@ -190,17 +190,21 @@ function requestNavUpdate() {
 
 function setTheme(theme, persist = true) {
   const isLight = theme === "light";
+  const isEnglish = document.documentElement.lang === "en";
   document.documentElement.dataset.theme = isLight ? "light" : "dark";
 
   if (themeToggle) {
-    themeToggle.setAttribute("aria-label", isLight ? "Activar modo oscuro" : "Activar modo claro");
+    const label = isEnglish
+      ? (isLight ? "Enable dark mode" : "Enable light mode")
+      : (isLight ? "Activar modo oscuro" : "Activar modo claro");
+    themeToggle.setAttribute("aria-label", label);
   }
 
   if (orbitLogo) {
     orbitElements = null;
     const logoPath = isLight
-      ? "assets/logo-stavion-light.svg?v=6"
-      : "assets/logo-stavion-dark.svg?v=6";
+      ? "/assets/logo-stavion-light.svg?v=6"
+      : "/assets/logo-stavion-dark.svg?v=6";
     if (orbitLogo.getAttribute("data") !== logoPath) {
       orbitLogo.setAttribute("data", logoPath);
     }
